@@ -9,6 +9,9 @@ var asteroids1Grp, asteroids2Grp;
 
 var player, playerImg;
 
+var missile, missileImg;
+var missileGrp;
+
 var bgMusic;
 
 var PLAY = 1;
@@ -26,6 +29,8 @@ function preload () {
   asteroid4Img = loadImage("Asteroid 4.png");
 
   playerImg = loadImage("player.png");
+
+  missileImg = loadImage("Missile.png");
 }
 
 function setup () {
@@ -41,12 +46,12 @@ function setup () {
 
   asteroids1Grp = createGroup();
   asteroids2Grp = createGroup(); 
-
+  missileGrp = createGroup();
 }
 
 function draw () {
   background(spaceImg); 
-
+  
   if(gameState === PLAY){
     asteroids1();
     asteroids2();
@@ -58,18 +63,30 @@ function draw () {
       player.y = player.y + 8;
     }
 
-    if (asteroids1Grp.isTouching(player)) {
+    if (asteroids1Grp.collide(player)) {
       asteroids1Grp.destroyEach();
     }
-    if (asteroids2Grp.isTouching(player)) {
+    if (asteroids2Grp.collide(player)) {
+      asteroids2Grp.destroyEach();
+    }    
+
+    if(asteroids1Grp.collide(missile)) {
+      asteroids1Grp.destroyEach();
+    }
+
+    if(asteroids2Grp.collide(missile)) {
       asteroids2Grp.destroyEach();
     }
 
-    if(earth.isTouching(asteroids1Grp)) {
+    if(earth.collide(asteroids1Grp)) {
       gameState = END;
     }
-    if(earth.isTouching(asteroids2Grp)) {
+    if(earth.collide(asteroids2Grp)) {
       gameState = END;
+    }
+
+    if(keyDown(32)) {
+      createMissile();
     }
   }
 
@@ -80,6 +97,7 @@ function draw () {
     asteroids2Grp.destroyEach();  
     asteroids1Grp.setVelocityXEach(0);  
     asteroids2Grp.setVelocityXEach(0);
+    missileGrp.destroyEach();
     background(gameOverImg);
   }
 
@@ -98,7 +116,7 @@ function asteroids1 () {
       asteroid1.addImage(asteroid2Img);  
     }
     asteroid1.y = Math.round(random(10,600));  
-    asteroid1.velocityX = 11;
+    asteroid1.velocityX = 9;
     asteroid1.Lifetime  = 100;  
     asteroids1Grp.add(asteroid1);    
   }
@@ -116,8 +134,18 @@ function asteroids2 () {
       asteroid2.addImage(asteroid4Img);  
     }  
     asteroid2.y = Math.round(random(30,450));  
-    asteroid2.velocityX = 13;
+    asteroid2.velocityX = 10;
     asteroid2.Lifetime  = 50;  
     asteroids2Grp.add(asteroid2);    
   }
+}
+
+function createMissile() {
+  missile = createSprite(1100,-20,50,50);
+  missile.y = player.y+30;
+  missile.addImage(missileImg);
+  missile.scale = 0.3;
+  missile.velocityX = -8;
+  missile.lifetime = 150;
+  missileGrp.add(missile);
 }
