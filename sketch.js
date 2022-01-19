@@ -1,4 +1,4 @@
-var earth, earthImg;
+rvar earth, earthImg;
 var spaceImg, gameOverImg;
 
 var asteroid1, asteroid1Img;
