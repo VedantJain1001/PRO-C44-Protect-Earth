@@ -72,10 +72,12 @@ function draw () {
 
     if(asteroids1Grp.collide(missile)) {
       asteroids1Grp.destroyEach();
+      missile.lifetime = 0;
     }
 
     if(asteroids2Grp.collide(missile)) {
       asteroids2Grp.destroyEach();
+      missile.lifetime = 0;
     }
 
     if(earth.collide(asteroids1Grp)) {
